@@ -69,11 +69,78 @@
                     <connections>
                         <outlet property="passwordTextField" destination="FnL-5q-A0p" id="W8V-Be-AOE"/>
                         <outlet property="usernameTextField" destination="EcU-3E-fJr" id="9mh-80-lzW"/>
+                        <segue destination="ZlF-VS-l0V" kind="show" identifier="loginToHome" id="zQl-gY-L8g"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="137.68115942028987" y="67.633928571428569"/>
         </scene>
+        <!--Feed View Controller-->
+        <scene sceneID="94s-41-f9X">
+            <objects>
+                <viewController storyboardIdentifier="homeViewController" id="NHK-Kg-otI" customClass="FeedViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" restorationIdentifier="testViewID" id="C97-Kj-RSe">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="SY6-x4-k62">
+                                <rect key="frame" x="20" y="56" width="374" height="752"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="rWq-Wu-BWz">
+                                        <rect key="frame" x="0.0" y="28" width="374" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rWq-Wu-BWz" id="OJ9-k0-o8r">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="SY6-x4-k62" firstAttribute="leading" secondItem="C97-Kj-RSe" secondAttribute="leadingMargin" id="4eR-l7-kU7"/>
+                            <constraint firstItem="SY6-x4-k62" firstAttribute="top" secondItem="C97-Kj-RSe" secondAttribute="topMargin" id="d6G-nQ-lYP"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="SY6-x4-k62" secondAttribute="trailing" id="kV3-AM-fFX"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="SY6-x4-k62" secondAttribute="bottom" id="yEp-wt-78J"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="yXd-Aq-058"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="z1l-LR-6FR">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="insta_camera_btn" id="OHU-AN-q9N">
+                            <connections>
+                                <action selector="photoButtonPressed:" destination="NHK-Kg-otI" id="fJ0-Bh-0xI"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LWz-34-0bw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2101.449275362319" y="65.625"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="KFt-d9-OVc">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ZlF-VS-l0V" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="L3F-xG-g4T"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="vZt-Xh-Q7y">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="NHK-Kg-otI" kind="relationship" relationship="rootViewController" id="cuR-xT-rUE"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XVI-B4-IBn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1191.304347826087" y="65.625"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="insta_camera_btn" width="25" height="25"/>
+    </resources>
 </document>

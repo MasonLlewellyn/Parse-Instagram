@@ -18,6 +18,7 @@
 @implementation LoginViewController
 
 - (BOOL) loginProtection{
+    //A method to protect the login screen, returns good if both username and password are nonempty
     bool u_empty = [self.usernameTextField.text isEqual:@""];
     bool p_empty = [self.passwordTextField.text isEqual:@""];
        
@@ -65,7 +66,14 @@
         [alert addAction:okAction];
     }
     
-    return !(p_empty || u_empty); //Returns true if the usename and password given is okay
+    bool good_val = !(p_empty || u_empty);
+    if (!good_val){
+        [self presentViewController:alert animated:YES completion:^{
+            // optional code for what happens after the alert controller has finished presenting
+        }];
+    }
+    
+    return good_val;
 }
 - (void) registerUser{
     // initialize a user object
@@ -76,54 +84,9 @@
     //newUser.email = self.emailField.text;
     newUser.password = self.passwordTextField.text;
        
-    bool u_empty = [self.usernameTextField.text isEqual:@""];
-    bool p_empty = [self.passwordTextField.text isEqual:@""];
+    bool good_pass = [self loginProtection];
        
-       
-    UIAlertController *alert = [UIAlertController alloc];
-    if (u_empty && p_empty){
-        alert = [UIAlertController alertControllerWithTitle:@"Login Error"
-                message:@"Both Username and Password cannot be empty"
-           preferredStyle:(UIAlertControllerStyleAlert)];
-               
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
-               style:UIAlertActionStyleDefault
-           handler:^(UIAlertAction * _Nonnull action) {
-                       // handle response here.
-        }];
-               
-        [alert addAction:okAction];
-           
-    }
-    else if (u_empty){
-        alert = [UIAlertController alertControllerWithTitle:@"Login Error"
-                message:@"Username cannot be empty"
-        preferredStyle:(UIAlertControllerStyleAlert)];
-               
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
-               style:UIAlertActionStyleDefault
-        handler:^(UIAlertAction * _Nonnull action) {
-                       // handle response here.
-        }];
-               
-        [alert addAction:okAction];
-               
-    }
-    else if (p_empty){
-        alert = [UIAlertController alertControllerWithTitle:@"Login Error"
-            message:@"Password cannot be empty"
-            preferredStyle:(UIAlertControllerStyleAlert)];
-               
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
-                                                              style:UIAlertActionStyleDefault
-                                                            handler:^(UIAlertAction * _Nonnull action) {
-                           // handle response here.
-                       }];
-               
-        [alert addAction:okAction];
-    }
-       
-    if (!(p_empty || u_empty)){
+    if (good_pass){
         // call sign up function on the object
         [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
             if (error != nil) {
@@ -136,11 +99,6 @@
             }
         }];
     }
-    else{
-        [self presentViewController:alert animated:YES completion:^{
-            // optional code for what happens after the alert controller has finished presenting
-        }];
-    }
 }
 
 
@@ -148,54 +106,8 @@
     NSString *username = self.usernameTextField.text;
     NSString *password = self.passwordTextField.text;
     
-    bool u_empty = [self.usernameTextField.text isEqual:@""];
-    bool p_empty = [self.passwordTextField.text isEqual:@""];
-    
-    
-    UIAlertController *alert = [UIAlertController alloc];
-    if (u_empty && p_empty){
-        alert = [UIAlertController alertControllerWithTitle:@"Login Error"
-                message:@"Both Username and Password cannot be empty"
-        preferredStyle:(UIAlertControllerStyleAlert)];
-            
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
-            style:UIAlertActionStyleDefault
-        handler:^(UIAlertAction * _Nonnull action) {
-                    // handle response here.
-        }];
-            
-        [alert addAction:okAction];
-        
-    }
-    else if (u_empty){
-        alert = [UIAlertController alertControllerWithTitle:@"Login Error"
-                message:@"Username cannot be empty"
-        preferredStyle:(UIAlertControllerStyleAlert)];
-            
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
-            style:UIAlertActionStyleDefault
-        handler:^(UIAlertAction * _Nonnull action) {
-                    // handle response here.
-        }];
-            
-        [alert addAction:okAction];
-            
-    }
-    else if (p_empty){
-        alert = [UIAlertController alertControllerWithTitle:@"Login Error"
-            message:@"Password cannot be empty"
-            preferredStyle:(UIAlertControllerStyleAlert)];
-            
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
-                                                           style:UIAlertActionStyleDefault
-                                                         handler:^(UIAlertAction * _Nonnull action) {
-                        // handle response here.
-                    }];
-            
-        [alert addAction:okAction];
-    }
-    
-    if (!(u_empty || p_empty)){
+    bool good_pass = [self loginProtection];
+    if (good_pass){
         [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser * user, NSError *  error) {
             if (error != nil) {
                 NSLog(@"User log in failed: %@", error.localizedDescription);
@@ -205,11 +117,6 @@
                 // display view controller that needs to shown after successful login
                 //[self performSegueWithIdentifier:@"loginSegue" sender:nil];
             }
-        }];
-    }
-    else{
-        [self presentViewController:alert animated:YES completion:^{
-            // optional code for what happens after the alert controller has finished presenting
         }];
     }
 }

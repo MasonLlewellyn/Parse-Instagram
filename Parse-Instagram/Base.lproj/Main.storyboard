@@ -79,7 +79,7 @@
         <!--Feed View Controller-->
         <scene sceneID="94s-41-f9X">
             <objects>
-                <viewController storyboardIdentifier="homeViewController" id="NHK-Kg-otI" customClass="FeedViewController" sceneMemberID="viewController">
+                <viewController id="NHK-Kg-otI" customClass="FeedViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" restorationIdentifier="testViewID" id="C97-Kj-RSe">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -88,13 +88,28 @@
                                 <rect key="frame" x="20" y="56" width="374" height="752"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="rWq-Wu-BWz">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="postCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="mrH-RL-N96" customClass="PostCell">
                                         <rect key="frame" x="0.0" y="28" width="374" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rWq-Wu-BWz" id="OJ9-k0-o8r">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mrH-RL-N96" id="7qM-EY-G46">
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8pQ-zm-sKb">
+                                                    <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="8pQ-zm-sKb" secondAttribute="bottom" id="1P9-1a-EOT"/>
+                                                <constraint firstItem="8pQ-zm-sKb" firstAttribute="top" secondItem="7qM-EY-G46" secondAttribute="top" id="QJM-x9-u4W"/>
+                                                <constraint firstAttribute="trailing" secondItem="8pQ-zm-sKb" secondAttribute="trailing" id="ZMR-G3-Ig9"/>
+                                                <constraint firstItem="8pQ-zm-sKb" firstAttribute="leading" secondItem="7qM-EY-G46" secondAttribute="leading" id="rcw-EC-HPL"/>
+                                            </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="postCell" destination="8pQ-zm-sKb" id="Fki-1z-Nmh"/>
+                                            <outlet property="postView" destination="8pQ-zm-sKb" id="mbp-Yr-7BR"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -123,7 +138,7 @@
         <!--Navigation Controller-->
         <scene sceneID="KFt-d9-OVc">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ZlF-VS-l0V" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="homeViewController" automaticallyAdjustsScrollViewInsets="NO" id="ZlF-VS-l0V" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="L3F-xG-g4T"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="vZt-Xh-Q7y">

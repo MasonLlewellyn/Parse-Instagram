@@ -24,8 +24,6 @@
     if (PFUser.currentUser) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"homeViewController"];
-        
-        
     }
 }
 

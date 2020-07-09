@@ -21,8 +21,10 @@
     // Configure the view for the selected state
 }
 - (void)setPost:(Post *)post {
+    NSLog(@"got post");
     _post = post;
     self.photoImageView.file = post[@"image"];
+    
     [self.photoImageView loadInBackground];
 }
 

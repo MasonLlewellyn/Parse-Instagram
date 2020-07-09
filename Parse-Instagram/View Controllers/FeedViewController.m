@@ -9,6 +9,9 @@
 #import "FeedViewController.h"
 #import <Parse/Parse.h>
 #import "Post.h"
+#import "PostCell.h"
+#import "LoginViewController.h"
+#import "AppDelegate.h"
 
 @interface FeedViewController ()
 
@@ -16,25 +19,41 @@
 
 @implementation FeedViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    
-    PFQuery *query = [PFQuery queryWithClassName:@"Post"];
-    [query whereKey:@"likesCount" greaterThan:@100];
-    query.limit = 20;
 
+- (void)refreshPosts{
+    PFQuery *query = [PFQuery queryWithClassName:@"Post"];
+    //[query whereKey:@"likesCount" greaterThan:@100];
+    query.limit = 20;
+    
     // fetch data asynchronously
+    __weak typeof(self) weakSelf = self;
     [query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
         if (posts != nil) {
             // do something with the array of object returned by the call
-            self.postArray = posts;
+            weakSelf.postArray = posts;
+            NSLog(@"Got posts %ld", weakSelf.postArray.count);
+            //NSLog(weakSelf.postArray);
         } else {
             NSLog(@"%@", error.localizedDescription);
         }
+    
+        [weakSelf.tableView reloadData];
     }];
     
+    
 }
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    
+    self.tableView.rowHeight = 200;
+    [self refreshPosts];
+    
+}
+
 - (IBAction)photoButtonPressed:(id)sender {
     UIImagePickerController *imagePickerVC = [UIImagePickerController new];
     imagePickerVC.delegate = self;
@@ -56,34 +75,75 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     
     // Get the image captured by the UIImagePickerController
-    UIImage *originalImage = info[UIImagePickerControllerOriginalImage];
+    //UIImage *originalImage = info[UIImagePickerControllerOriginalImage];
     UIImage *editedImage = info[UIImagePickerControllerEditedImage];
-
-    // Do something with the images (based on your use case)
+    CGSize sz = CGSizeMake(360, 360);
     
+    [self resizeImage:editedImage withSize:sz];
+    // Do something with the images (based on your use case)
+    __weak typeof(self) weakSelf = self;
+    [Post postUserImage:editedImage withCaption:@"" withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded) NSLog(@"Posted image");
+        
+        [weakSelf refreshPosts];
+    }];
     // Dismiss UIImagePickerController to go back to your original view controller
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
+    UIImageView *resizeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+    
+    resizeImageView.contentMode = UIViewContentModeScaleAspectFill;
+    resizeImageView.image = image;
+    
+    UIGraphicsBeginImageContext(size);
+    [resizeImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
 
-/*#pragma mark - Navigation
+
+#pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-}*/
+   
+}
 
 
 #pragma mark - TableView
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    Post *currPost = self.postArray[indexPath.row];
-    return nil;
+    NSLog(@"Another One");
+    Post *currPost = self.postArray[indexPath.item];
+    PostCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"postCell"];
+    
+    [cell setPost:currPost];
+    if (cell == nil){
+        NSLog(@"Young rich and tasteless");
+    }
+    return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.postArray.count;
 }
+
+- (IBAction)logoutPressed:(id)sender {
+    [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+        appDelegate.window.rootViewController = loginViewController;
+    }];
+    
+}
+
 
 @end

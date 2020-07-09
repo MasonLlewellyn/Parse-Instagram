@@ -65,5 +65,20 @@
     <string>Need library access to upload images</string> <!-- added this for photo library permission -->
     <key>NSCameraUsageDescription</key> <!-- added this for camera permission -->
     <string>Need camera access to take pictures</string> <!-- added this for camera permission -->
+    <key>NSAppTransportSecurity</key>
+      <dict>
+          <key>NSAllowsArbitraryLoads</key>
+          <true/>
+          <key>NSExceptionDomains</key>
+          <dict>
+              <key>yourdomain.com</key>
+              <dict>
+                  <key>NSIncludesSubdomains</key>
+                  <true/>
+                  <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+                  <false/>
+              </dict>
+         </dict>
+    </dict>
 </dict>
 </plist>

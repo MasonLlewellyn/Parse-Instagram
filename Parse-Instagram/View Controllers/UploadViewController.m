@@ -25,9 +25,9 @@
 - (IBAction)sharePressed:(id)sender {
     __weak typeof(self) weakSelf = self;
     [Post postUserImage:self.postImage withCaption:self.captionTextView.text withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-        
+        [weakSelf dismissViewControllerAnimated:YES completion:nil];
     }];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    
 }
 
 

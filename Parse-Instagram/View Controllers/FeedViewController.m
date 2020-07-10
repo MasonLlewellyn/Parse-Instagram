@@ -60,6 +60,7 @@
     // Do any additional setup after loading the view.
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    //self.tableView.rowHeight = 200;
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(refreshPosts:) forControlEvents:UIControlEventValueChanged];
@@ -135,6 +136,10 @@
         UINavigationController *controlr = [segue destinationViewController];
         UploadViewController *upCtr = [controlr viewControllers][0];
         upCtr.postImage = (UIImage*)sender;
+    }
+    else if([sender isKindOfClass:[PostCell class]]){
+        PostCell *cell = sender;
+        
     }
 }
 

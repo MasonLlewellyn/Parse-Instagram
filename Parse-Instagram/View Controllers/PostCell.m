@@ -22,14 +22,14 @@
 }
 - (void) setupCell:(Post *)currPost{
     [self setPost:currPost];
-    self.postCaption.text = currPost[@"caption"];
+    //self.postCaption.text = currPost[@"caption"];
 }
 
 - (void)setPost:(Post *)post {
     NSLog(@"got post");
     _post = post;
     self.photoImageView.file = post[@"image"];
-    
+    //self.photoImageView.contentMode = UIViewContentModeScaleAspectFill;
     [self.photoImageView loadInBackground];
 }
 

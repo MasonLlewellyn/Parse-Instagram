@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		97CCD7774C03582C82B23429 /* Pods_Parse_Instagram_Parse_InstagramUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78D9FC5D83318CE289FAEBD0 /* Pods_Parse_Instagram_Parse_InstagramUITests.framework */; };
 		B10F14C6407B4ED6A309F397 /* Pods_Parse_Instagram.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DBB8F309A1A3ECD78078750 /* Pods_Parse_Instagram.framework */; };
+		C3738F6124B79539003EF625 /* UploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3738F6024B79539003EF625 /* UploadViewController.m */; };
 		C3821E1924B515A4000393D4 /* FeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3821E1824B515A4000393D4 /* FeedViewController.m */; };
 		C3821E1C24B5410F000393D4 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = C3821E1B24B5410F000393D4 /* Post.m */; };
 		C3821E1F24B548DA000393D4 /* PostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3821E1E24B548DA000393D4 /* PostCell.m */; };
@@ -49,6 +50,8 @@
 		621602991BDD052C5FF1C723 /* Pods-Parse-InstagramTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parse-InstagramTests.debug.xcconfig"; path = "Target Support Files/Pods-Parse-InstagramTests/Pods-Parse-InstagramTests.debug.xcconfig"; sourceTree = "<group>"; };
 		78D9FC5D83318CE289FAEBD0 /* Pods_Parse_Instagram_Parse_InstagramUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Parse_Instagram_Parse_InstagramUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B867A5D9984DA29BA11198C7 /* Pods-Parse-InstagramTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parse-InstagramTests.release.xcconfig"; path = "Target Support Files/Pods-Parse-InstagramTests/Pods-Parse-InstagramTests.release.xcconfig"; sourceTree = "<group>"; };
+		C3738F5F24B79539003EF625 /* UploadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UploadViewController.h; sourceTree = "<group>"; };
+		C3738F6024B79539003EF625 /* UploadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UploadViewController.m; sourceTree = "<group>"; };
 		C3821E1724B515A4000393D4 /* FeedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedViewController.h; sourceTree = "<group>"; };
 		C3821E1824B515A4000393D4 /* FeedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeedViewController.m; sourceTree = "<group>"; };
 		C3821E1A24B5410F000393D4 /* Post.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Post.h; sourceTree = "<group>"; };
@@ -180,6 +183,8 @@
 		C3889CED24B4013600AF98C6 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				C3738F5F24B79539003EF625 /* UploadViewController.h */,
+				C3738F6024B79539003EF625 /* UploadViewController.m */,
 				C3821E1724B515A4000393D4 /* FeedViewController.h */,
 				C3821E1824B515A4000393D4 /* FeedViewController.m */,
 				C3821E1D24B548DA000393D4 /* PostCell.h */,
@@ -443,6 +448,7 @@
 				C3821E1924B515A4000393D4 /* FeedViewController.m in Sources */,
 				C3889CB724B3EB8900AF98C6 /* AppDelegate.m in Sources */,
 				C3821E1F24B548DA000393D4 /* PostCell.m in Sources */,
+				C3738F6124B79539003EF625 /* UploadViewController.m in Sources */,
 				C3889CC824B3EB8900AF98C6 /* main.m in Sources */,
 				C3889CBA24B3EB8900AF98C6 /* SceneDelegate.m in Sources */,
 			);

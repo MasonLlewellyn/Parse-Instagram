@@ -20,6 +20,11 @@
 
     // Configure the view for the selected state
 }
+- (void) setupCell:(Post *)currPost{
+    [self setPost:currPost];
+    self.postCaption.text = currPost[@"caption"];
+}
+
 - (void)setPost:(Post *)post {
     NSLog(@"got post");
     _post = post;

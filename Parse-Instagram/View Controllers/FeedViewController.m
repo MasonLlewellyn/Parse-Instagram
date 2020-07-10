@@ -11,6 +11,7 @@
 #import "Post.h"
 #import "PostCell.h"
 #import "LoginViewController.h"
+#import "UploadViewController.h"
 #import "AppDelegate.h"
 
 @interface FeedViewController ()
@@ -20,7 +21,7 @@
 @implementation FeedViewController
 
 
-- (void)refreshPosts{
+- (void)fetchPosts{
     PFQuery *query = [PFQuery queryWithClassName:@"Post"];
     //[query whereKey:@"likesCount" greaterThan:@100];
     query.limit = 20;
@@ -40,6 +41,17 @@
         [weakSelf.tableView reloadData];
     }];
     
+    ;
+    
+}
+
+- (void)refreshPosts:(UIRefreshControl*)refreshControl{
+    [self fetchPosts];
+    [refreshControl endRefreshing];
+}
+
+- (void) viewWillAppear:(BOOL)animated{
+    NSLog(@"View Appearing!");
     
 }
 
@@ -49,9 +61,11 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
-    self.tableView.rowHeight = 200;
-    [self refreshPosts];
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(refreshPosts:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView insertSubview:refreshControl atIndex:0];
     
+    [self fetchPosts];
 }
 
 - (IBAction)photoButtonPressed:(id)sender {
@@ -79,16 +93,18 @@
     UIImage *editedImage = info[UIImagePickerControllerEditedImage];
     CGSize sz = CGSizeMake(360, 360);
     
-    [self resizeImage:editedImage withSize:sz];
+    //[self resizeImage:editedImage withSize:sz];
     // Do something with the images (based on your use case)
-    __weak typeof(self) weakSelf = self;
+    /*__weak typeof(self) weakSelf = self;
     [Post postUserImage:editedImage withCaption:@"" withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) NSLog(@"Posted image");
         
         [weakSelf refreshPosts];
-    }];
+    }];*/
     // Dismiss UIImagePickerController to go back to your original view controller
     [self dismissViewControllerAnimated:YES completion:nil];
+    
+    [self performSegueWithIdentifier:@"feedToCompose" sender:editedImage];
 }
 
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
@@ -112,7 +128,14 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-   
+    
+    self.navigationController.modalPresentationStyle = UIModalPresentationFullScreen;
+    if([sender isKindOfClass:[UIImage class]]){
+        //We are segueing to the the Compose View
+        UINavigationController *controlr = [segue destinationViewController];
+        UploadViewController *upCtr = [controlr viewControllers][0];
+        upCtr.postImage = (UIImage*)sender;
+    }
 }
 
 
@@ -123,7 +146,7 @@
     Post *currPost = self.postArray[indexPath.item];
     PostCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"postCell"];
     
-    [cell setPost:currPost];
+    [cell setupCell: currPost];
     if (cell == nil){
         NSLog(@"Young rich and tasteless");
     }

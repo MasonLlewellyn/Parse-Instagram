@@ -7,15 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Post.h"
 @import Parse;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface UploadViewController : UIViewController <UITextViewDelegate>
-@property (weak, nonatomic) IBOutlet PFImageView *photoImageView;
-@property (weak, nonatomic) IBOutlet UITextView *captionTextView;
-@property (strong, nonatomic) UIImage *postImage;
+@protocol UploadViewControllerDelegate
+- (void)didPost;
+@end
 
+@interface UploadViewController : UIViewController
+@property (nonatomic, weak) id<UploadViewControllerDelegate> delegate;
 @end
 
 NS_ASSUME_NONNULL_END

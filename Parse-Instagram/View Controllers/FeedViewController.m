@@ -12,6 +12,7 @@
 #import "PostCell.h"
 #import "LoginViewController.h"
 #import "UploadViewController.h"
+#import "postDetailsViewController.h"
 #import "AppDelegate.h"
 
 @interface FeedViewController ()
@@ -24,6 +25,7 @@
 - (void)fetchPosts{
     PFQuery *query = [PFQuery queryWithClassName:@"Post"];
     //[query whereKey:@"likesCount" greaterThan:@100];
+    [query orderByDescending:@"createdAt"];
     query.limit = 20;
     
     // fetch data asynchronously
@@ -33,7 +35,6 @@
             // do something with the array of object returned by the call
             weakSelf.postArray = posts;
             NSLog(@"Got posts %ld", weakSelf.postArray.count);
-            //NSLog(weakSelf.postArray);
         } else {
             NSLog(@"%@", error.localizedDescription);
         }
@@ -50,17 +51,12 @@
     [refreshControl endRefreshing];
 }
 
-- (void) viewWillAppear:(BOOL)animated{
-    NSLog(@"View Appearing!");
-    
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    //self.tableView.rowHeight = 200;
+    self.title = @"Home";
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(refreshPosts:) forControlEvents:UIControlEventValueChanged];
@@ -70,56 +66,13 @@
 }
 
 - (IBAction)photoButtonPressed:(id)sender {
-    UIImagePickerController *imagePickerVC = [UIImagePickerController new];
-    imagePickerVC.delegate = self;
-    imagePickerVC.allowsEditing = YES;
-    //imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
-    
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
-    }
-    else {
-        NSLog(@"Camera 🚫 available so we will use photo library instead");
-        imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    }
-    
-    [self presentViewController:imagePickerVC animated:YES completion:nil];
+    [self performSegueWithIdentifier:@"feedToCompose" sender:self];
 }
 
-#pragma mark - ImagePicker
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
-    
-    // Get the image captured by the UIImagePickerController
-    //UIImage *originalImage = info[UIImagePickerControllerOriginalImage];
-    UIImage *editedImage = info[UIImagePickerControllerEditedImage];
-    CGSize sz = CGSizeMake(360, 360);
-    
-    //[self resizeImage:editedImage withSize:sz];
-    // Do something with the images (based on your use case)
-    /*__weak typeof(self) weakSelf = self;
-    [Post postUserImage:editedImage withCaption:@"" withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-        if (succeeded) NSLog(@"Posted image");
-        
-        [weakSelf refreshPosts];
-    }];*/
-    // Dismiss UIImagePickerController to go back to your original view controller
-    [self dismissViewControllerAnimated:YES completion:nil];
-    
-    [self performSegueWithIdentifier:@"feedToCompose" sender:editedImage];
-}
-
-- (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
-    UIImageView *resizeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
-    
-    resizeImageView.contentMode = UIViewContentModeScaleAspectFill;
-    resizeImageView.image = image;
-    
-    UIGraphicsBeginImageContext(size);
-    [resizeImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return newImage;
+#pragma mark - UploadView
+- (void)didPost{
+    NSLog(@"delegate method called!");
+    [self fetchPosts];
 }
 
 
@@ -131,14 +84,16 @@
     // Pass the selected object to the new view controller.
     
     self.navigationController.modalPresentationStyle = UIModalPresentationFullScreen;
-    if([sender isKindOfClass:[UIImage class]]){
-        //We are segueing to the the Compose View
-        UINavigationController *controlr = [segue destinationViewController];
-        UploadViewController *upCtr = [controlr viewControllers][0];
-        upCtr.postImage = (UIImage*)sender;
+    if ([sender isKindOfClass:[FeedViewController class]]){
+        //Segue to details
+        UploadViewController *uploadVC = [segue destinationViewController];
+        uploadVC.delegate = self;
     }
-    else if([sender isKindOfClass:[PostCell class]]){
+    if([sender isKindOfClass:[PostCell class]]){
+        //If a user has clicked on a cell and is sent to the details view
         PostCell *cell = sender;
+        postDetailsViewController *postVC = [segue destinationViewController];
+        postVC.post = cell.post;
         
     }
 }
@@ -147,14 +102,10 @@
 #pragma mark - TableView
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    NSLog(@"Another One");
     Post *currPost = self.postArray[indexPath.item];
     PostCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"postCell"];
     
     [cell setupCell: currPost];
-    if (cell == nil){
-        NSLog(@"Young rich and tasteless");
-    }
     return cell;
 }
 

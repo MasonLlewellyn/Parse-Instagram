@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UploadViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FeedViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface FeedViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UploadViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *postArray;

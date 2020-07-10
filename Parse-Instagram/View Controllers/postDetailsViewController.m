@@ -7,8 +7,14 @@
 //
 
 #import "postDetailsViewController.h"
+#import "DateTools.h"
 
 @interface postDetailsViewController ()
+@property (weak, nonatomic) IBOutlet UILabel *createdLabel;
+@property (weak, nonatomic) IBOutlet PFImageView *photoImageView;
+
+@property (weak, nonatomic) IBOutlet UILabel *captionLabel;
+
 
 @end
 
@@ -17,7 +23,37 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self setupView];
+    
 }
+
+- (void)setupView{
+    self.photoImageView.file = self.post[@"image"];
+    //self.photoImageView.contentMode = UIViewContentModeScaleAspectFill;
+    [self.photoImageView loadInBackground];
+    NSLog(@"%@", self.post[@"caption"]);
+    
+    NSDate *createDate = self.post[@"createdAt"];
+    NSDate *dt = [NSDate date];
+    
+    
+    NSTimeInterval refTime = -86400;
+    NSTimeInterval sinceCreated = [createDate timeIntervalSinceDate:dt];
+    
+    if (sinceCreated >= refTime){
+        self.createdLabel.text = createDate.shortTimeAgoSinceNow;
+    }
+    else{
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"E MMM d HH:mm:ss Z y";
+        formatter.dateStyle = NSDateFormatterShortStyle;
+        
+        self.createdLabel.text = [formatter stringFromDate:createDate];
+    }
+    
+    self.captionLabel.text = self.post[@"caption"];
+}
+
 
 /*
 #pragma mark - Navigation

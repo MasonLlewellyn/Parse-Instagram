@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Post.h"
+@import Parse;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface postDetailsViewController : UIViewController
-
+@property (nonatomic, strong) Post *post;
+@property (nonatomic, strong) UIImage *postImage;
 @end
 
 NS_ASSUME_NONNULL_END

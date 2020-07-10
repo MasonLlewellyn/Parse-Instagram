@@ -34,7 +34,7 @@
     [newPost saveInBackgroundWithBlock: completion];
 }
 
-+ (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image {
+/*+ (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image {
  
     // check if image is not nil
     if (!image) {
@@ -49,6 +49,19 @@
     
     //return [PFFileObject fileWithName:@"image.png" data:imageData];
     return [PFFileObject fileObjectWithName:@"image.png" data:imageData];
+}*/
+
++ (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image {
+    // check if image is not nil
+    if (!image) {
+        return nil;
+    }
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.6);
+    // get image data and check if that is not nil
+    if (!imageData) {
+        return nil;
+    }
+    return [PFFileObject fileObjectWithName:@"image.jpeg" data:imageData];
 }
 
 @end

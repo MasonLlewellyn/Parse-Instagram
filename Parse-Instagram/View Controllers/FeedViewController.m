@@ -103,7 +103,7 @@ NSString *HeaderViewIdentifier = @"TableViewHeaderView";
 #pragma mark - TableView
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    Post *currPost = self.postArray[indexPath.item];
+    Post *currPost = self.postArray[(indexPath.row + 1) * indexPath.section];
     PostCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"postCell"];
     
     [cell setupCell: currPost];
@@ -123,10 +123,12 @@ NSString *HeaderViewIdentifier = @"TableViewHeaderView";
     
     return header;
 }
-
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return self.postArray.count;
+}
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.postArray.count;
+    return 1;
 }
 
 - (IBAction)logoutPressed:(id)sender {

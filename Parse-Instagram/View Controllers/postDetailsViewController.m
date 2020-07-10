@@ -31,26 +31,14 @@
     self.photoImageView.file = self.post[@"image"];
     //self.photoImageView.contentMode = UIViewContentModeScaleAspectFill;
     [self.photoImageView loadInBackground];
-    NSLog(@"%@", self.post[@"caption"]);
     
-    NSDate *createDate = self.post[@"createdAt"];
-    NSDate *dt = [NSDate date];
+    NSDate *createDate = self.post.createdAt;
     
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"E MMM d HH:mm:ss Z y";
+    formatter.dateStyle = NSDateFormatterShortStyle;
     
-    NSTimeInterval refTime = -86400;
-    NSTimeInterval sinceCreated = [createDate timeIntervalSinceDate:dt];
-    
-    if (sinceCreated >= refTime){
-        self.createdLabel.text = createDate.shortTimeAgoSinceNow;
-    }
-    else{
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        formatter.dateFormat = @"E MMM d HH:mm:ss Z y";
-        formatter.dateStyle = NSDateFormatterShortStyle;
-        
-        self.createdLabel.text = [formatter stringFromDate:createDate];
-    }
-    
+    self.createdLabel.text = [formatter stringFromDate:createDate];
     self.captionLabel.text = self.post[@"caption"];
 }
 

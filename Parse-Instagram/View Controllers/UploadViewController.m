@@ -24,7 +24,7 @@
     [self.photoImageView setImage:self.postImage];
     self.captionTextView.text = @"Place Caption Here";
     
-    [self selectImage];
+    //[self selectImage];
     
     
 }
@@ -43,12 +43,19 @@
 - (IBAction)cencelPressed:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+- (IBAction)useCameraPressed:(id)sender {
+    
+}
+
+- (IBAction)findInLibraryPressed:(id)sender {
+    
+}
+
 
 - (void)selectImage{
     UIImagePickerController *imagePickerVC = [UIImagePickerController new];
     imagePickerVC.delegate = self;
     imagePickerVC.allowsEditing = YES;
-    //imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;

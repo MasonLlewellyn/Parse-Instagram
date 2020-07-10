@@ -14,13 +14,15 @@
 #import "UploadViewController.h"
 #import "postDetailsViewController.h"
 #import "AppDelegate.h"
+#import "SceneDelegate.h"
+
 
 @interface FeedViewController ()
 
 @end
 
 @implementation FeedViewController
-
+NSString *HeaderViewIdentifier = @"TableViewHeaderView";
 
 - (void)fetchPosts{
     PFQuery *query = [PFQuery queryWithClassName:@"Post"];
@@ -42,8 +44,6 @@
         [weakSelf.tableView reloadData];
     }];
     
-    ;
-    
 }
 
 - (void)refreshPosts:(UIRefreshControl*)refreshControl{
@@ -62,6 +62,7 @@
     [refreshControl addTarget:self action:@selector(refreshPosts:) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:refreshControl atIndex:0];
     
+    [self.tableView registerClass:[UITableViewHeaderFooterView class] forHeaderFooterViewReuseIdentifier:HeaderViewIdentifier];
     [self fetchPosts];
 }
 
@@ -109,18 +110,34 @@
     return cell;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UITableViewHeaderFooterView *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:HeaderViewIdentifier];
+    
+    Post *currPost = self.postArray[section];
+    NSLog(@"Drawing Header for %d", section);
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"E MMM d HH:mm:ss Z y";
+    formatter.dateStyle = NSDateFormatterShortStyle;
+    
+    header.textLabel.text = [formatter stringFromDate:currPost.createdAt];
+    
+    return header;
+}
+
+
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.postArray.count;
 }
 
 - (IBAction)logoutPressed:(id)sender {
     [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        SceneDelegate *sceneDelegate = (SceneDelegate *)self.view.window.windowScene.delegate;
         
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-        appDelegate.window.rootViewController = loginViewController;
+        sceneDelegate.window.rootViewController = loginViewController;
     }];
+    
     
 }
 

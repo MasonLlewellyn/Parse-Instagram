@@ -9,6 +9,7 @@
 #import "FeedViewController.h"
 #import <Parse/Parse.h>
 #import "Post.h"
+#import "DateTools.h"
 #import "PostCell.h"
 #import "LoginViewController.h"
 #import "UploadViewController.h"
@@ -28,6 +29,7 @@ NSString *HeaderViewIdentifier = @"TableViewHeaderView";
     PFQuery *query = [PFQuery queryWithClassName:@"Post"];
     //[query whereKey:@"likesCount" greaterThan:@100];
     [query orderByDescending:@"createdAt"];
+    [query includeKey:@"author"];
     query.limit = 20;
     
     // fetch data asynchronously
@@ -114,12 +116,12 @@ NSString *HeaderViewIdentifier = @"TableViewHeaderView";
     UITableViewHeaderFooterView *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:HeaderViewIdentifier];
     
     Post *currPost = self.postArray[section];
-    NSLog(@"Drawing Header for %d", section);
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"E MMM d HH:mm:ss Z y";
-    formatter.dateStyle = NSDateFormatterShortStyle;
     
-    header.textLabel.text = [formatter stringFromDate:currPost.createdAt];
+    NSString *dateString = currPost.createdAt.shortTimeAgoSinceNow;//[formatter stringFromDate:currPost.createdAt];
+    NSString *userString = currPost.author.username;//currPost[@"author"];
+    NSString *headerString = [NSString stringWithFormat:@"%@ • %@", userString, dateString];
+    
+    header.textLabel.text = headerString;
     
     return header;
 }

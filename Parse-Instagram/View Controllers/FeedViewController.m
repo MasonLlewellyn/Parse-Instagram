@@ -19,26 +19,30 @@
 
 
 @interface FeedViewController ()
-
+@property (assign, nonatomic) BOOL isMoreDataLoading;
+@property (assign, nonatomic) NSInteger loadedCount;
 @end
 
 @implementation FeedViewController
 NSString *HeaderViewIdentifier = @"TableViewHeaderView";
 
-- (void)fetchPosts{
+- (void)fetchPosts:(NSInteger)skipCount{
+    //Completely refreshes the table view
     PFQuery *query = [PFQuery queryWithClassName:@"Post"];
     //[query whereKey:@"likesCount" greaterThan:@100];
     [query orderByDescending:@"createdAt"];
     [query includeKey:@"author"];
     query.limit = 20;
     
+    
     // fetch data asynchronously
     __weak typeof(self) weakSelf = self;
     [query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
         if (posts != nil) {
             // do something with the array of object returned by the call
-            weakSelf.postArray = posts;
+            weakSelf.postArray = [NSMutableArray arrayWithArray:posts];
             NSLog(@"Got posts %ld", weakSelf.postArray.count);
+            weakSelf.loadedCount = posts.count;
         } else {
             NSLog(@"%@", error.localizedDescription);
         }
@@ -48,8 +52,36 @@ NSString *HeaderViewIdentifier = @"TableViewHeaderView";
     
 }
 
+- (void)fetchMorePosts{
+    //Fetches more posts for the tableView
+    PFQuery *query = [PFQuery queryWithClassName:@"Post"];
+    //[query whereKey:@"likesCount" greaterThan:@100];
+    [query orderByDescending:@"createdAt"];
+    [query includeKey:@"author"];
+    query.limit = 20;
+    query.skip = self.loadedCount;
+    
+    // fetch data asynchronously
+    __weak typeof(self) weakSelf = self;
+    [query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
+        if (posts != nil) {
+            // do something with the array of object returned by the call
+            [weakSelf.postArray addObjectsFromArray:posts];
+            NSLog(@"Got posts %ld", posts.count);
+            weakSelf.loadedCount += posts.count;
+            
+            self.isMoreDataLoading = false;
+        } else {
+            NSLog(@"%@", error.localizedDescription);
+        }
+    
+        [weakSelf.tableView reloadData];
+    }];
+}
+
 - (void)refreshPosts:(UIRefreshControl*)refreshControl{
-    [self fetchPosts];
+    self.loadedCount = 0;
+    [self fetchPosts: self.loadedCount];
     [refreshControl endRefreshing];
 }
 
@@ -60,12 +92,17 @@ NSString *HeaderViewIdentifier = @"TableViewHeaderView";
     self.tableView.delegate = self;
     self.title = @"Home";
     
+    self.postArray = [NSMutableArray array];
+    
+    
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(refreshPosts:) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:refreshControl atIndex:0];
     
     [self.tableView registerClass:[UITableViewHeaderFooterView class] forHeaderFooterViewReuseIdentifier:HeaderViewIdentifier];
-    [self fetchPosts];
+    
+    self.loadedCount = 0;
+    [self fetchPosts:self.loadedCount];
 }
 
 - (IBAction)photoButtonPressed:(id)sender {
@@ -75,7 +112,8 @@ NSString *HeaderViewIdentifier = @"TableViewHeaderView";
 #pragma mark - UploadView
 - (void)didPost{
     NSLog(@"delegate method called!");
-    [self fetchPosts];
+    self.loadedCount = 0;
+    [self fetchPosts: self.loadedCount];
 }
 
 
@@ -131,6 +169,22 @@ NSString *HeaderViewIdentifier = @"TableViewHeaderView";
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if(!self.isMoreDataLoading){
+
+        int scrollViewContentHeight = self.tableView.contentSize.height;
+        int scrollOffsetThreshold = scrollViewContentHeight - self.tableView.bounds.size.height;
+        
+        
+        if(scrollView.contentOffset.y > scrollOffsetThreshold && self.tableView.isDragging) {
+            self.isMoreDataLoading = true;
+            NSLog(@"Reached bottom.  More data being loaded");
+            [self fetchMorePosts];
+        }
+    }
+
 }
 
 - (IBAction)logoutPressed:(id)sender {

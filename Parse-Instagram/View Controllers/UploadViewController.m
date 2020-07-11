@@ -12,8 +12,10 @@
 
 @interface UploadViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property (weak, nonatomic) IBOutlet PFImageView *photoImageView;
-@property (weak, nonatomic) IBOutlet UITextView *captionTextView;
+
+@property (weak, nonatomic) IBOutlet UITextField *postCaptionTextField;
 @property (strong, nonatomic) UIImage *postImage;
+
 @end
 
 @implementation UploadViewController
@@ -21,16 +23,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.photoImageView setImage:self.postImage];
-    self.captionTextView.text = @"Place Caption Here";
-    
     //[self selectImage];
     
     
 }
 - (IBAction)sharePressed:(id)sender {
     __weak typeof(self) weakSelf = self;
-    [Post postUserImage:self.postImage withCaption:self.captionTextView.text withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+    [Post postUserImage:self.postImage withCaption:self.postCaptionTextField.text withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded){
             [weakSelf dismissViewControllerAnimated:YES completion:nil];
             //TODO: add a UploadViewController delegate method that is implemented in the feedViewController to refresh
@@ -43,27 +42,22 @@
 - (IBAction)cencelPressed:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-- (IBAction)useCameraPressed:(id)sender {
-    
-}
-
-- (IBAction)findInLibraryPressed:(id)sender {
-    
-}
-
-
-- (void)selectImage{
+- (IBAction)cameraPressed:(id)sender {
+    NSLog(@"I see you've chosen the camera");
     UIImagePickerController *imagePickerVC = [UIImagePickerController new];
     imagePickerVC.delegate = self;
     imagePickerVC.allowsEditing = YES;
     
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
-    }
-    else {
-        NSLog(@"Camera 🚫 available so we will use photo library instead");
-        imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    }
+    imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
+    [self presentViewController:imagePickerVC animated:YES completion:nil];
+}
+- (IBAction)libraryPressed:(id)sender {
+    NSLog(@"Welcome to Greene Library");
+    UIImagePickerController *imagePickerVC = [UIImagePickerController new];
+    imagePickerVC.delegate = self;
+    imagePickerVC.allowsEditing = YES;
+    
+    imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     [self presentViewController:imagePickerVC animated:YES completion:nil];
 }
 

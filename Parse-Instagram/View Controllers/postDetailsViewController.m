@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet PFImageView *photoImageView;
 
 @property (weak, nonatomic) IBOutlet UILabel *captionLabel;
+@property (weak, nonatomic) IBOutlet UILabel *likeCountLabel;
 
 
 @end
@@ -38,10 +39,16 @@
     formatter.dateFormat = @"E MMM d HH:mm:ss Z y";
     formatter.dateStyle = NSDateFormatterShortStyle;
     
+    NSNumber *likeCount = self.post.likeCount;
+    
+    self.likeCountLabel.text = [likeCount stringValue];
     self.createdLabel.text = [formatter stringFromDate:createDate];
     self.captionLabel.text = self.post[@"caption"];
 }
 
+- (IBAction)likeButtonPressed:(id)sender {
+    
+}
 
 /*
 #pragma mark - Navigation

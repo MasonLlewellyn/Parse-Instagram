@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface FeedViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UploadViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) NSArray *postArray;
+@property (nonatomic, strong) NSMutableArray *postArray;
 @end
 
 NS_ASSUME_NONNULL_END

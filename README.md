@@ -39,8 +39,8 @@ The following **additional** features are implemented:
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1.
-2.
+1. I would like to dicuss potentially hosting other file formats such as video and what considerations we would have to make while doing so.  For example, how would we compress videos so that they could be stored without taking up too much space.
+2. I would also like to discuss what considerations would need to be taken in scaling up the number to users from just a few to the 1 billion monthly active users that instagram currently serves.  
 
 ## Video Walkthrough
 
@@ -63,7 +63,7 @@ The main challenges I encountered were strange autolayout issues such as UIImage
 
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright [2020] [Facebook University]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
